@@ -81,9 +81,8 @@ int main() {
                 Vector L = lights[1]->position();
                 Vector C = viewPoint;
                 Vector V = intersection.vec();
-                //cout<<"V : "<<V.x()<<" "<<V.y()<<" "<<V.z()<<endl;
                 Vector E = (C - V);
-                //cout<<"E : "<<E.x()<<" "<<E.y()<<" "<<E.z()<<endl;
+                // A Vérifier
                 Vector N = (V - centerCercle) + V;
                 Vector T = L - V;
                 Vector R = N * (N*T) * 2 - T;
