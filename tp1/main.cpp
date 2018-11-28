@@ -67,6 +67,7 @@ int main() {
     for (int i = 0; i < imageWidth; i++) {
         for (int j = 0; j < imageHeight; j++) {
             Vector xOne = viewPoint + viewDirection * viewPlaneDist + viewUp * imageToViewPlane(j, imageHeight, viewPlaneHeight) + viewParallel * imageToViewPlane(i, imageWidth,  viewPlaneWidth);
+            
             Line xray(viewPoint, xOne, false);
             Intersection intersection = findFirstIntersection(xray, frontPlaneDist, backPlaneDist);
             
@@ -75,12 +76,31 @@ int main() {
                 Color colorSphere = Color(intersection.geometry()->material().ambient());
                 
                 Vector centerCercle = ((Sphere *)intersection.geometry())->center();
-                Vector radius (((Sphere *)intersection.geometry())->radius(),0,0);
-                //Vector N = centerCercle + radius;
+                Vector radius (0,0,-((Sphere *)intersection.geometry())->radius());
                 
+                Vector L = lights[0]->position();
+                Vector C = viewPoint;
+                //Vector V = C - xOne;
+                //cout<<"V : "<<V.x()<<" "<<V.y()<<" "<<V.z()<<endl;
+                Vector E = xOne - (xOne - radius);
+                //cout<<"E : "<<E.x()<<" "<<E.y()<<" "<<E.z()<<endl;
+                Vector N = centerCercle + radius;
+                Vector T = Vector(0,0,0);
+                Vector R = N * (N*T) * 2 - T;
                 
-              
+                E.normalize();
+                N.normalize();
+                T.normalize();
+                R.normalize();
                 
+                if (N * T > 0) {
+                    colorSphere += intersection.geometry()->material().diffuse()*lights[0]->diffuse()*(N*T);
+                }
+                if (E * R > 0) {
+                    colorSphere += intersection.geometry()->material().specular()*lights[0]->specular()*pow(E*R, intersection.geometry()->material().shininess());
+                }
+                
+                colorSphere *= lights[0]->intensity();
                 
                 /********************************TODO********************************/
                 // E : vector from the intersection point to the camera
