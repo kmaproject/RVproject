@@ -76,16 +76,16 @@ int main() {
                 Color colorSphere = Color(intersection.geometry()->material().ambient());
                 
                 Vector centerCercle = ((Sphere *)intersection.geometry())->center();
-                Vector radius (0,0,-((Sphere *)intersection.geometry())->radius());
+                //double radius = ((Sphere *)intersection.geometry())->radius();
                 
-                Vector L = lights[0]->position();
+                Vector L = lights[1]->position();
                 Vector C = viewPoint;
-                //Vector V = C - xOne;
+                Vector V = intersection.vec();
                 //cout<<"V : "<<V.x()<<" "<<V.y()<<" "<<V.z()<<endl;
-                Vector E = xOne - (xOne - radius);
+                Vector E = (C - V);
                 //cout<<"E : "<<E.x()<<" "<<E.y()<<" "<<E.z()<<endl;
-                Vector N = centerCercle + radius;
-                Vector T = Vector(0,0,0);
+                Vector N = (V - centerCercle) + V;
+                Vector T = L - V;
                 Vector R = N * (N*T) * 2 - T;
                 
                 E.normalize();
@@ -128,7 +128,7 @@ int main() {
         }
     }
     
-    image.store("/Users/ramirez/Documents/Projects/tp1/tp1/newScene.png");
+    image.store("newScene.png");
     
     
     /*for (int i = 0; i < geometryCount; i++) {
