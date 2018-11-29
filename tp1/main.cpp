@@ -73,9 +73,6 @@ int main() {
             
             if(intersection.valid())
             {
-                Color colorSphere = Color(intersection.geometry()->material().ambient());
-                
-                Vector centerCercle = ((Sphere *)intersection.geometry())->center();
                 //double radius = ((Sphere *)intersection.geometry())->radius();
                 
                 Vector L = lights[1]->position();
@@ -83,20 +80,22 @@ int main() {
                 Vector V = intersection.vec();
                 Vector E = (C - V);
                 // A Vérifier
-                Vector N = (V - centerCercle) + V;
+                Vector N = (V - ((Sphere *)intersection.geometry())->center()) + V;
                 Vector T = L - V;
-                Vector R = N * (N*T) * 2 - T;
+                Vector R = N * (N * T) * 2 - T;
                 
                 E.normalize();
                 N.normalize();
                 T.normalize();
                 R.normalize();
                 
+                Color colorSphere = intersection.geometry()->material().ambient() * lights[0]->ambient();
+                
                 if (N * T > 0) {
-                    colorSphere += intersection.geometry()->material().diffuse()*lights[0]->diffuse()*(N*T);
+                    colorSphere += intersection.geometry()->material().diffuse() * lights[0]->diffuse() * (N * T);
                 }
                 if (E * R > 0) {
-                    colorSphere += intersection.geometry()->material().specular()*lights[0]->specular()*pow(E*R, intersection.geometry()->material().shininess());
+                    colorSphere += intersection.geometry()->material().specular() * lights[0]->specular() * pow(E*R, intersection.geometry()->material().shininess());
                 }
                 
                 colorSphere *= lights[0]->intensity();
