@@ -95,7 +95,7 @@ int main() {
                     colorSphere += intersection.geometry()->material().diffuse() * lights[0]->diffuse() * (N * T);
                 }
                 if (E * R > 0) {
-                    colorSphere += intersection.geometry()->material().specular() * lights[0]->specular() * pow(E*R, intersection.geometry()->material().shininess());
+                    colorSphere += intersection.geometry()->material().specular() * lights[0]->specular() * pow(E * R, intersection.geometry()->material().shininess());
                 }
                 
                 colorSphere *= lights[0]->intensity();
