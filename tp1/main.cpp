@@ -73,15 +73,13 @@ int main() {
             
             if(intersection.valid())
             {
-                //double radius = ((Sphere *)intersection.geometry())->radius();
-                
-                Vector L = lights[1]->position();
+                Vector L = lights[0]->position();
                 Vector C = viewPoint;
                 Vector V = intersection.vec();
                 Vector E = (C - V);
                 // A Vérifier
                 Vector N = (V - ((Sphere *)intersection.geometry())->center()) + V;
-                Vector T = L - V;
+                Vector T = (L - V);
                 Vector R = N * (N * T) * 2 - T;
                 
                 E.normalize();
